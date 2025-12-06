@@ -5,7 +5,7 @@
 Библиотеки: 
 System
 System.Threading
-System.Collections.Generic
+System.Collections.Generiс
 
 
 Пример:
