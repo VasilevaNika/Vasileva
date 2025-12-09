@@ -18,7 +18,8 @@ class Program
             Console.WriteLine(data);
             mutex.ReleaseMutex();
             
-            Thread.Sleep(10);
+            int delay = random.Next(100, 5001);
+            Thread.Sleep(delay);
         }
     }
 
@@ -27,10 +28,11 @@ class Program
         for (int i = 0; i < 3; i++)
         {
             new Thread(Worker).Start();
-
         }
+
+        int randomDelay = random.Next(100, 5001);
+        Thread.Sleep(randomDelay);
         
-        Thread.Sleep(1000);
         Console.WriteLine($"Всего элементов: {list.Count}");
     }
 }
