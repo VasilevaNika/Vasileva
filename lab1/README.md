@@ -1,64 +1,101 @@
 # Лабораторная работа 1
 
-Cериализация JSON, управление ресурсами и работа с файлами в C#
-
-##  Цели работы:
-1. Освоить использование атрибутов JSON для управления процессом сериализации/десериализации.
-2. Изучить паттерн IDisposable для ĸорреĸтного освобождения ресурсов.
-3. Научиться работать с файловой системой (чтение/запись файлов).
-4. Реализовать сохранение и загрузĸу объеĸтов в/из файлов JSON.
-5. Понимать разницу между явным освобождением ресурсов через Dispose() и автоматичесĸим через
-финализатор.
+Сериализация JSON, управление ресурсами и работа с файлами в C#
 
 ## Структура проекта
 
-- Person.cs - класс Person с атрибутами JSON
-- PersonSerializer.cs - класс для сериализации и работы с файлами
-- FileResourceManager.cs - класс для управления файловыми ресурсами
-- Program.cs - тесты
-
-## Задание 1: Класс Person
-
-Класс Person содержит свойства:
-- FirstName, LastName, Age - обычные свойства
-- Password - с [JsonIgnore]
-- Id - с [JsonPropertyName("personId")]
-- _birthDate - приватное поле с [JsonInclude]
-- Email - с валидацией (проверка '@')
-- PhoneNumber - с [JsonPropertyName("phone")]
-- FullName - только для чтения
-- IsAdult - только для чтения
-
-## Задание 2: Класс PersonSerializer
-
-Методы:
-1. SerializeToJson - сериализация в строку
-2. DeserializeFromJson - десериализация из строки
-3. SaveToFile - сохранение в файл (синхронно)
-4. LoadFromFile - загрузка из файла (синхронно)
-5. SaveToFileAsync - сохранение в файл (асинхронно)
-6. LoadFromFileAsync - загрузка из файла (асинхронно)
-7. SaveListToFile - экспорт списка объектов
-8. LoadListFromFile - импорт из файла
-
-## Задание 3: Класс FileResourceManager
-
-Класс реализует IDisposable и предоставляет методы:
-- OpenForWriting - открытие для записи
-- OpenForReading - открытие для чтения
-- WriteLine - запись строки
-- ReadAllText - чтение всего файла
-- AppendText - добавление текста
-- GetFileInfo - информация о файле
-
-## Задание 4: Тестирование
-
-В Program.cs реализованы тесты для всех классов.
-
-## Запуск
-
 ```
+lab1/
+├── Person.cs                    # Класс Person с атрибутами JSON
+├── PersonSerializer.cs          # Класс для сериализации и работы с файлами
+├── FileResourceManager.cs       # Класс для управления файловыми ресурсами
+├── Program.cs                   # Демонстрация работы классов
+├── Lab1.csproj                  # Файл проекта
+└── tests/                       # Папка с тестами
+    ├── PersonTests.cs           # Тесты для класса Person
+    ├── PersonSerializerTests.cs # Тесты для класса PersonSerializer
+    ├── FileResourceManagerTests.cs # Тесты для класса FileResourceManager
+    └── Lab1.Tests.csproj        # Файл тестового проекта
+```
+
+## Описание классов
+
+### Person
+
+Класс представляет информацию о человеке с использованием атрибутов JSON:
+
+- `FirstName`, `LastName`, `Age` - основные свойства
+- `Password` - свойство с атрибутом `[JsonIgnore]` (не сериализуется)
+- `Id` - свойство с атрибутом `[JsonPropertyName("personId")]` (сериализуется как "personId")
+- `BirthDate` - приватное поле с атрибутом `[JsonInclude]`
+- `Email` - свойство с валидацией (проверка наличия символа '@')
+- `PhoneNumber` - свойство с атрибутом `[JsonPropertyName("phone")]`
+- `FullName` - вычисляемое свойство (только для чтения)
+- `IsAdult` - вычисляемое свойство (только для чтения)
+
+### PersonSerializer
+
+Класс для сериализации и десериализации объектов Person в JSON:
+
+- `SerializeToJson(Person person)` - сериализация в строку JSON
+- `DeserializeFromJson(string json)` - десериализация из строки JSON
+- `SaveToFile(Person person, string filePath)` - сохранение в файл (синхронно)
+- `LoadFromFile(string filePath)` - загрузка из файла (синхронно)
+- `SaveToFileAsync(Person person, string filePath)` - сохранение в файл (асинхронно)
+- `LoadFromFileAsync(string filePath)` - загрузка из файла (асинхронно)
+- `SaveListToFile(List<Person> people, string filePath)` - сохранение списка в файл
+- `LoadListFromFile(string filePath)` - загрузка списка из файла
+
+Использует `SemaphoreSlim` для потокобезопасности операций с файлами.
+
+### FileResourceManager
+
+Класс для управления файловыми ресурсами, реализует интерфейс `IDisposable`:
+
+- `OpenForWriting()` - открытие файла для записи
+- `OpenForReading()` - открытие файла для чтения
+- `WriteLine(string text)` - запись строки в файл
+- `ReadAllText()` - чтение всего содержимого файла
+- `AppendText(string text)` - добавление текста в конец файла
+- `GetFileInfo()` - получение информации о файле
+- `Dispose()` - освобождение ресурсов
+
+## Запуск программы
+
+```bash
 dotnet restore
 dotnet build
 dotnet run
 ```
+
+Программа демонстрирует работу всех трех классов:
+- Создание и использование объектов Person
+- Сериализация и десериализация в JSON
+- Работа с файлами через FileResourceManager
+
+## Запуск тестов
+
+```bash
+dotnet test tests/Lab1.Tests.csproj
+```
+
+Или из корневой директории:
+
+```bash
+dotnet test
+```
+
+## Зависимости
+
+### Основной проект (Lab1.csproj)
+- `System.Text.Json` версия 8.0.5
+
+### Тестовый проект (tests/Lab1.Tests.csproj)
+- `Microsoft.NET.Test.Sdk` версия 17.8.0
+- `xunit` версия 2.6.2
+- `xunit.runner.visualstudio` версия 2.5.4
+- `coverlet.collector` версия 6.0.0
+
+## Требования
+
+- .NET 8.0 SDK или выше

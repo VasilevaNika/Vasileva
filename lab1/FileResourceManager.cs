@@ -17,7 +17,6 @@ public class FileResourceManager : IDisposable
         {
             throw new ArgumentException("Путь к файлу не может быть пустым", nameof(filePath));
         }
-
         _filePath = filePath;
         _fileMode = fileMode;
     }
@@ -25,7 +24,6 @@ public class FileResourceManager : IDisposable
     public void OpenForWriting()
     {
         ThrowIfDisposed();
-
         try
         {
             _fileStream = new FileStream(_filePath, _fileMode, FileAccess.Write, FileShare.Read);
@@ -40,14 +38,12 @@ public class FileResourceManager : IDisposable
     public void OpenForReading()
     {
         ThrowIfDisposed();
-
         try
         {
             if (!File.Exists(_filePath))
             {
                 throw new FileNotFoundException($"Файл не найден: {_filePath}");
             }
-
             _fileStream = new FileStream(_filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             _reader = new StreamReader(_fileStream, Encoding.UTF8);
         }
@@ -60,12 +56,10 @@ public class FileResourceManager : IDisposable
     public void WriteLine(string text)
     {
         ThrowIfDisposed();
-
         if (_writer == null)
         {
             throw new InvalidOperationException("Файл не открыт для записи. Вызовите OpenForWriting()");
         }
-
         try
         {
             _writer.WriteLine(text);
@@ -80,12 +74,10 @@ public class FileResourceManager : IDisposable
     public string ReadAllText()
     {
         ThrowIfDisposed();
-
         if (_reader == null)
         {
             throw new InvalidOperationException("Файл не открыт для чтения. Вызовите OpenForReading()");
         }
-
         try
         {
             _reader.BaseStream.Seek(0, SeekOrigin.Begin);
@@ -100,7 +92,6 @@ public class FileResourceManager : IDisposable
     public void AppendText(string text)
     {
         ThrowIfDisposed();
-
         try
         {
             if (_writer == null)
@@ -125,14 +116,12 @@ public class FileResourceManager : IDisposable
     public FileInfo GetFileInfo()
     {
         ThrowIfDisposed();
-
         try
         {
             if (!File.Exists(_filePath))
             {
                 throw new FileNotFoundException($"Файл не найден: {_filePath}");
             }
-
             return new FileInfo(_filePath);
         }
         catch (Exception ex)
@@ -164,12 +153,10 @@ public class FileResourceManager : IDisposable
                 _writer?.Dispose();
                 _reader?.Dispose();
                 _fileStream?.Dispose();
-
                 _writer = null;
                 _reader = null;
                 _fileStream = null;
             }
-
             _disposed = true;
         }
     }

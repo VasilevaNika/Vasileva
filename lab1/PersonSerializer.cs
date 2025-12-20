@@ -9,7 +9,6 @@ public class PersonSerializer
     {
         WriteIndented = true
     };
-
     private static readonly SemaphoreSlim _fileSemaphore = new(1, 1);
     private static readonly string _logFilePath = "errors.log";
 
@@ -34,7 +33,6 @@ public class PersonSerializer
             {
                 throw new ArgumentException("JSON строка не может быть пустой");
             }
-
             var person = JsonSerializer.Deserialize<Person>(json, _jsonOptions);
             if (person == null)
             {
@@ -58,14 +56,12 @@ public class PersonSerializer
             {
                 throw new ArgumentNullException(nameof(person));
             }
-
             var json = SerializeToJson(person);
             var directory = Path.GetDirectoryName(filePath);
             if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
             }
-
             File.WriteAllText(filePath, json, Encoding.UTF8);
         }
         catch (Exception ex)
@@ -88,7 +84,6 @@ public class PersonSerializer
             {
                 throw new FileNotFoundException($"Файл не найден: {filePath}");
             }
-
             var json = File.ReadAllText(filePath, Encoding.UTF8);
             return DeserializeFromJson(json);
         }
@@ -112,14 +107,12 @@ public class PersonSerializer
             {
                 throw new ArgumentNullException(nameof(person));
             }
-
             var json = SerializeToJson(person);
             var directory = Path.GetDirectoryName(filePath);
             if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
             }
-
             await File.WriteAllTextAsync(filePath, json, Encoding.UTF8);
         }
         catch (Exception ex)
@@ -142,7 +135,6 @@ public class PersonSerializer
             {
                 throw new FileNotFoundException($"Файл не найден: {filePath}");
             }
-
             var json = await File.ReadAllTextAsync(filePath, Encoding.UTF8);
             return DeserializeFromJson(json);
         }
@@ -166,14 +158,12 @@ public class PersonSerializer
             {
                 throw new ArgumentNullException(nameof(people));
             }
-
             var json = JsonSerializer.Serialize(people, _jsonOptions);
             var directory = Path.GetDirectoryName(filePath);
             if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
             }
-
             File.WriteAllText(filePath, json, Encoding.UTF8);
         }
         catch (Exception ex)
@@ -196,13 +186,11 @@ public class PersonSerializer
             {
                 throw new FileNotFoundException($"Файл не найден: {filePath}");
             }
-
             var json = File.ReadAllText(filePath, Encoding.UTF8);
             if (string.IsNullOrWhiteSpace(json))
             {
                 return new List<Person>();
             }
-
             var people = JsonSerializer.Deserialize<List<Person>>(json, _jsonOptions);
             return people ?? new List<Person>();
         }
