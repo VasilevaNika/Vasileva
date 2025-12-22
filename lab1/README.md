@@ -7,10 +7,11 @@
 ```
 lab1/
 ├── Person.cs                    # Класс Person с атрибутами JSON
-├── PersonSerializer.cs          # Класс для сериализации и работы с файлами
-├── FileResourceManager.cs       # Класс для управления файловыми ресурсами
 ├── Program.cs                   # Демонстрация работы классов
 ├── Lab1.csproj                  # Файл проекта
+├── services/                    # Папка с сервисными классами
+│   ├── PersonSerializer.cs     # Класс для сериализации и работы с файлами
+│   └── FileResourceManager.cs  # Класс для управления файловыми ресурсами
 └── tests/                       # Папка с тестами
     ├── PersonTests.cs           # Тесты для класса Person
     ├── PersonSerializerTests.cs # Тесты для класса PersonSerializer

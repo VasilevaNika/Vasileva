@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.Json;
 
-namespace Lab1;
+namespace Lab1.Services;
 
 public class PersonSerializer
 {
@@ -217,3 +217,4 @@ public class PersonSerializer
         }
     }
 }
+

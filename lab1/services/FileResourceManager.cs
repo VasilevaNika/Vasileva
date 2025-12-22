@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Lab1;
+namespace Lab1.Services;
 
 public class FileResourceManager : IDisposable
 {
@@ -166,3 +166,4 @@ public class FileResourceManager : IDisposable
         Dispose(false);
     }
 }
+

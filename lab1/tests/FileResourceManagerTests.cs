@@ -1,4 +1,5 @@
 using Lab1;
+using Lab1.Services;
 using Xunit;
 
 namespace Lab1.Tests;

@@ -1,3 +1,5 @@
+using Lab1.Services;
+
 namespace Lab1;
 
 class Program
