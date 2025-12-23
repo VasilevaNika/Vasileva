@@ -8,20 +8,6 @@ namespace CollectionPerformanceBenchmark
 {
     public class CollectionBenchmark
     {
-        private const int CollectionSize = 100_000;
-        private const int WarmupIterations = 3;
-        private const int MeasurementIterations = 5;
-
-        public class BenchmarkResult
-        {
-            public string CollectionType { get; set; } = string.Empty;
-            public string Operation { get; set; } = string.Empty;
-            public double AverageTimeMs { get; set; }
-            public double MinTimeMs { get; set; }
-            public double MaxTimeMs { get; set; }
-            public List<double> AllMeasurements { get; set; } = new();
-        }
-
         private readonly List<BenchmarkResult> _results = new();
 
         public List<BenchmarkResult> RunAllBenchmarks()
@@ -29,8 +15,8 @@ namespace CollectionPerformanceBenchmark
             _results.Clear();
 
             Console.WriteLine("Начало замеров производительности");
-            Console.WriteLine($"Размер коллекции: {CollectionSize:N0} элементов");
-            Console.WriteLine($"Количество итераций: {MeasurementIterations}");
+            Console.WriteLine($"Размер коллекции: {BenchmarkConfig.CollectionSize:N0} элементов");
+            Console.WriteLine($"Количество итераций: {BenchmarkConfig.MeasurementIterations}");
 
             BenchmarkList();
             BenchmarkLinkedList();
@@ -48,7 +34,7 @@ namespace CollectionPerformanceBenchmark
             MeasureOperation("List<T>", "Добавление в конец", () =>
             {
                 var list = new List<int>();
-                for (int i = 0; i < CollectionSize; i++)
+                for (int i = 0; i < BenchmarkConfig.CollectionSize; i++)
                     list.Add(i);
                 return list;
             });
@@ -56,7 +42,7 @@ namespace CollectionPerformanceBenchmark
             MeasureOperation("List<T>", "Добавление в начало", () =>
             {
                 var list = new List<int>();
-                for (int i = 0; i < CollectionSize; i++)
+                for (int i = 0; i < BenchmarkConfig.CollectionSize; i++)
                     list.Insert(0, i);
                 return list;
             });
@@ -64,14 +50,14 @@ namespace CollectionPerformanceBenchmark
             MeasureOperation("List<T>", "Добавление в середину", () =>
             {
                 var list = new List<int>();
-                for (int i = 0; i < CollectionSize; i++)
+                for (int i = 0; i < BenchmarkConfig.CollectionSize; i++)
                     list.Insert(list.Count / 2, i);
                 return list;
             });
 
             MeasureOperation("List<T>", "Удаление из начала", () =>
             {
-                var list = Enumerable.Range(0, CollectionSize).ToList();
+                var list = Enumerable.Range(0, BenchmarkConfig.CollectionSize).ToList();
                 while (list.Count > 0)
                     list.RemoveAt(0);
                 return list;
@@ -79,7 +65,7 @@ namespace CollectionPerformanceBenchmark
 
             MeasureOperation("List<T>", "Удаление из конца", () =>
             {
-                var list = Enumerable.Range(0, CollectionSize).ToList();
+                var list = Enumerable.Range(0, BenchmarkConfig.CollectionSize).ToList();
                 while (list.Count > 0)
                     list.RemoveAt(list.Count - 1);
                 return list;
@@ -87,7 +73,7 @@ namespace CollectionPerformanceBenchmark
 
             MeasureOperation("List<T>", "Удаление из середины", () =>
             {
-                var list = Enumerable.Range(0, CollectionSize).ToList();
+                var list = Enumerable.Range(0, BenchmarkConfig.CollectionSize).ToList();
                 while (list.Count > 0)
                     list.RemoveAt(list.Count / 2);
                 return list;
@@ -95,15 +81,15 @@ namespace CollectionPerformanceBenchmark
 
             MeasureOperation("List<T>", "Поиск элемента", () =>
             {
-                var list = Enumerable.Range(0, CollectionSize).ToList();
-                var found = list.Contains(CollectionSize / 2);
+                var list = Enumerable.Range(0, BenchmarkConfig.CollectionSize).ToList();
+                var found = list.Contains(BenchmarkConfig.CollectionSize / 2);
                 return list;
             });
 
             MeasureOperation("List<T>", "Получение по индексу", () =>
             {
-                var list = Enumerable.Range(0, CollectionSize).ToList();
-                var value = list[CollectionSize / 2];
+                var list = Enumerable.Range(0, BenchmarkConfig.CollectionSize).ToList();
+                var value = list[BenchmarkConfig.CollectionSize / 2];
                 return list;
             });
         }
@@ -115,7 +101,7 @@ namespace CollectionPerformanceBenchmark
             MeasureOperation("LinkedList<T>", "Добавление в конец", () =>
             {
                 var list = new LinkedList<int>();
-                for (int i = 0; i < CollectionSize; i++)
+                for (int i = 0; i < BenchmarkConfig.CollectionSize; i++)
                     list.AddLast(i);
                 return list;
             });
@@ -123,7 +109,7 @@ namespace CollectionPerformanceBenchmark
             MeasureOperation("LinkedList<T>", "Добавление в начало", () =>
             {
                 var list = new LinkedList<int>();
-                for (int i = 0; i < CollectionSize; i++)
+                for (int i = 0; i < BenchmarkConfig.CollectionSize; i++)
                     list.AddFirst(i);
                 return list;
             });
@@ -132,7 +118,7 @@ namespace CollectionPerformanceBenchmark
             {
                 var list = new LinkedList<int>();
                 var middle = list.AddFirst(0);
-                for (int i = 1; i < CollectionSize; i++)
+                for (int i = 1; i < BenchmarkConfig.CollectionSize; i++)
                 {
                     if (i % 2 == 0)
                         middle = list.AddAfter(middle, i);
@@ -144,7 +130,7 @@ namespace CollectionPerformanceBenchmark
 
             MeasureOperation("LinkedList<T>", "Удаление из начала", () =>
             {
-                var list = new LinkedList<int>(Enumerable.Range(0, CollectionSize));
+                var list = new LinkedList<int>(Enumerable.Range(0, BenchmarkConfig.CollectionSize));
                 while (list.Count > 0)
                     list.RemoveFirst();
                 return list;
@@ -152,7 +138,7 @@ namespace CollectionPerformanceBenchmark
 
             MeasureOperation("LinkedList<T>", "Удаление из конца", () =>
             {
-                var list = new LinkedList<int>(Enumerable.Range(0, CollectionSize));
+                var list = new LinkedList<int>(Enumerable.Range(0, BenchmarkConfig.CollectionSize));
                 while (list.Count > 0)
                     list.RemoveLast();
                 return list;
@@ -160,7 +146,7 @@ namespace CollectionPerformanceBenchmark
 
             MeasureOperation("LinkedList<T>", "Удаление из середины", () =>
             {
-                var list = new LinkedList<int>(Enumerable.Range(0, CollectionSize));
+                var list = new LinkedList<int>(Enumerable.Range(0, BenchmarkConfig.CollectionSize));
                 while (list.Count > 0)
                 {
                     var middle = GetMiddleNode(list);
@@ -174,16 +160,16 @@ namespace CollectionPerformanceBenchmark
 
             MeasureOperation("LinkedList<T>", "Поиск элемента", () =>
             {
-                var list = new LinkedList<int>(Enumerable.Range(0, CollectionSize));
-                var found = list.Contains(CollectionSize / 2);
+                var list = new LinkedList<int>(Enumerable.Range(0, BenchmarkConfig.CollectionSize));
+                var found = list.Contains(BenchmarkConfig.CollectionSize / 2);
                 return list;
             });
 
             MeasureOperation("LinkedList<T>", "Получение по индексу", () =>
             {
-                var list = new LinkedList<int>(Enumerable.Range(0, CollectionSize));
+                var list = new LinkedList<int>(Enumerable.Range(0, BenchmarkConfig.CollectionSize));
                 var node = list.First;
-                for (int i = 0; i < CollectionSize / 2 && node != null; i++)
+                for (int i = 0; i < BenchmarkConfig.CollectionSize / 2 && node != null; i++)
                     node = node.Next;
                 var value = node?.Value ?? 0;
                 return list;
@@ -197,7 +183,7 @@ namespace CollectionPerformanceBenchmark
             MeasureOperation("Queue<T>", "Добавление в конец (Enqueue)", () =>
             {
                 var queue = new Queue<int>();
-                for (int i = 0; i < CollectionSize; i++)
+                for (int i = 0; i < BenchmarkConfig.CollectionSize; i++)
                     queue.Enqueue(i);
                 return queue;
             });
@@ -225,7 +211,7 @@ namespace CollectionPerformanceBenchmark
             MeasureOperation("Stack<T>", "Добавление в конец (Push)", () =>
             {
                 var stack = new Stack<int>();
-                for (int i = 0; i < CollectionSize; i++)
+                for (int i = 0; i < BenchmarkConfig.CollectionSize; i++)
                     stack.Push(i);
                 return stack;
             });
@@ -253,7 +239,7 @@ namespace CollectionPerformanceBenchmark
             MeasureOperation("ImmutableList<T>", "Добавление в конец", () =>
             {
                 var list = ImmutableList<int>.Empty;
-                for (int i = 0; i < CollectionSize; i++)
+                for (int i = 0; i < BenchmarkConfig.CollectionSize; i++)
                     list = list.Add(i);
                 return list;
             });
@@ -261,7 +247,7 @@ namespace CollectionPerformanceBenchmark
             MeasureOperation("ImmutableList<T>", "Добавление в начало", () =>
             {
                 var list = ImmutableList<int>.Empty;
-                for (int i = 0; i < CollectionSize; i++)
+                for (int i = 0; i < BenchmarkConfig.CollectionSize; i++)
                     list = list.Insert(0, i);
                 return list;
             });
@@ -269,14 +255,14 @@ namespace CollectionPerformanceBenchmark
             MeasureOperation("ImmutableList<T>", "Добавление в середину", () =>
             {
                 var list = ImmutableList<int>.Empty;
-                for (int i = 0; i < CollectionSize; i++)
+                for (int i = 0; i < BenchmarkConfig.CollectionSize; i++)
                     list = list.Insert(list.Count / 2, i);
                 return list;
             });
 
             MeasureOperation("ImmutableList<T>", "Удаление из начала", () =>
             {
-                var list = ImmutableList<int>.Empty.AddRange(Enumerable.Range(0, CollectionSize));
+                var list = ImmutableList<int>.Empty.AddRange(Enumerable.Range(0, BenchmarkConfig.CollectionSize));
                 while (list.Count > 0)
                     list = list.RemoveAt(0);
                 return list;
@@ -284,7 +270,7 @@ namespace CollectionPerformanceBenchmark
 
             MeasureOperation("ImmutableList<T>", "Удаление из конца", () =>
             {
-                var list = ImmutableList<int>.Empty.AddRange(Enumerable.Range(0, CollectionSize));
+                var list = ImmutableList<int>.Empty.AddRange(Enumerable.Range(0, BenchmarkConfig.CollectionSize));
                 while (list.Count > 0)
                     list = list.RemoveAt(list.Count - 1);
                 return list;
@@ -292,7 +278,7 @@ namespace CollectionPerformanceBenchmark
 
             MeasureOperation("ImmutableList<T>", "Удаление из середины", () =>
             {
-                var list = ImmutableList<int>.Empty.AddRange(Enumerable.Range(0, CollectionSize));
+                var list = ImmutableList<int>.Empty.AddRange(Enumerable.Range(0, BenchmarkConfig.CollectionSize));
                 while (list.Count > 0)
                     list = list.RemoveAt(list.Count / 2);
                 return list;
@@ -300,28 +286,28 @@ namespace CollectionPerformanceBenchmark
 
             MeasureOperation("ImmutableList<T>", "Поиск элемента", () =>
             {
-                var list = ImmutableList<int>.Empty.AddRange(Enumerable.Range(0, CollectionSize));
-                var found = list.Contains(CollectionSize / 2);
+                var list = ImmutableList<int>.Empty.AddRange(Enumerable.Range(0, BenchmarkConfig.CollectionSize));
+                var found = list.Contains(BenchmarkConfig.CollectionSize / 2);
                 return list;
             });
 
             MeasureOperation("ImmutableList<T>", "Получение по индексу", () =>
             {
-                var list = ImmutableList<int>.Empty.AddRange(Enumerable.Range(0, CollectionSize));
-                var value = list[CollectionSize / 2];
+                var list = ImmutableList<int>.Empty.AddRange(Enumerable.Range(0, BenchmarkConfig.CollectionSize));
+                var value = list[BenchmarkConfig.CollectionSize / 2];
                 return list;
             });
         }
 
         private void MeasureOperation<T>(string collectionType, string operation, Func<T> action)
         {
-            for (int i = 0; i < WarmupIterations; i++)
+            for (int i = 0; i < BenchmarkConfig.WarmupIterations; i++)
             {
                 action();
             }
 
             var measurements = new List<double>();
-            for (int i = 0; i < MeasurementIterations; i++)
+            for (int i = 0; i < BenchmarkConfig.MeasurementIterations; i++)
             {
                 GC.Collect();
                 GC.WaitForPendingFinalizers();

@@ -13,7 +13,7 @@ namespace CollectionPerformanceBenchmark
             PrintResultsTable(results);
         }
 
-        private static void PrintResultsTable(List<CollectionBenchmark.BenchmarkResult> results)
+        private static void PrintResultsTable(List<BenchmarkResult> results)
         {
             Console.WriteLine($"{"Коллекция",-20} {"Операция",-35} {"Среднее (мс)",-15} {"Мин (мс)",-12} {"Макс (мс)",-12}");
             Console.WriteLine(new string('-', 95));
