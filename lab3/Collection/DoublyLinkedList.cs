@@ -295,3 +295,4 @@ public class DoublyLinkedList : IList, ICollection, IEnumerable
         _version++;
     }
 }
+

@@ -96,9 +96,10 @@ dotnet test
 lab3/
 ├── CollectionsLab.csproj          # Основной проект
 ├── Program.cs                      # Точка входа приложения
-├── SimpleList.cs                   # Реализация SimpleList
-├── SimpleDictionary.cs             # Реализация SimpleDictionary
-├── DoublyLinkedList.cs             # Реализация DoublyLinkedList
+├── Collections/                    # Папка с реализациями коллекций
+│   ├── SimpleList.cs               # Реализация SimpleList
+│   ├── SimpleDictionary.cs         # Реализация SimpleDictionary
+│   └── DoublyLinkedList.cs         # Реализация DoublyLinkedList
 ├── Tests/                          # Папка с тестами
 │   ├── SimpleListTests.cs          # Тесты для SimpleList
 │   ├── SimpleDictionaryTests.cs    # Тесты для SimpleDictionary
