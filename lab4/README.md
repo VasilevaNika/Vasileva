@@ -56,10 +56,9 @@ dotnet test tests
 ```
 lab4/
 ├── Program.cs - главный файл
-├── services/
-│   ├── DiningPhilosophers.cs - обедающие философы
-│   ├── SleepingBarber.cs - спящий парикмахер
-│   └── ProducerConsumer.cs - производитель-потребитель
+├── DiningPhilosophers.cs - обедающие философы
+├── SleepingBarber.cs - спящий парикмахер
+├── ProducerConsumer.cs - производитель-потребитель
 └── tests/ - тесты
 ```
 
