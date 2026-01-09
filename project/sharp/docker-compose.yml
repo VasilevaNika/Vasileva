@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: test_db
+      POSTGRES_PASSWORD: test_db
+      POSTGRES_DB: test_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5438:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  migrations:
+    build: ./WebApplication1/Liquibase
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      LIQUIBASE_CHANGELOG_FILE: master.xml
+      LIQUIBASE_URL: jdbc:postgresql://db:5432/test_db
+      LIQUIBASE_USERNAME: test_db
+      LIQUIBASE_PASSWORD: test_db
+
+  api:
+    build:
+      context: ./WebApplication1
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=test_db;Username=test_db;Password=test_db"
+      Redis__ConnectionString: "redis:6379"
+      JWT__SecretKey: "your-super-secret-key-minimum-32-characters-long"
+      JWT__Issuer: "TravelJournalAPI"
+      JWT__Audience: "TravelJournalUsers"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+
